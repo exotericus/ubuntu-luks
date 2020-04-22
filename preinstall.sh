@@ -9,6 +9,7 @@ sudo cryptsetup luksOpen /dev/sda3 CryptDisk
 #Setup LVM on /dev/mapper/CryptDisk
 sudo pvcreate /dev/mapper/CryptDisk
 sudo vgcreate ubuntu-vg /dev/mapper/CryptDisk
+sudo cryptsetup luksOpen /dev/sda3 CryptDisk
 sudo lvcreate -n swap -L 2G ubuntu-vg
 sudo lvcreate -n var -L 2G ubuntu-vg
 sudo lvcreate -n log -L 2G ubuntu-vg
