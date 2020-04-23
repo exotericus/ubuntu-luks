@@ -18,6 +18,7 @@ echo 'mount -t sysfs sys /sys' >> /mnt/postinstall_chroot.sh
 echo 'mount -t devpts devpts /dev/pts' >> /mnt/postinstall_chroot.sh
 MYDISK=$(sudo blkid | grep LUKS | cut -d " " -f 2 | sed 's/\"//g')
 echo "CryptDisk $MYDISK none luks,discard" >> /mnt/mydisk.txt
+echo 'cat /mnt/mydisk.txt >> /etc/crypttab' >> /mnt/postinstall_chroot.sh
 echo 'update-initramfs -k all -c' >> /mnt/postinstall_chroot.sh
 echo 'update-grub' >> /mnt/postinstall_chroot.sh
 echo 'exit' >> /mnt/postinstall_chroot.sh
