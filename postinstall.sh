@@ -4,7 +4,7 @@ sudo mount /dev/ubuntu-vg/home /mnt/home # this is probably not necessary
 sudo mount /dev/ubuntu-vg/tmp /mnt/tmp
 sudo mount /dev/ubuntu-vg/var /mnt/var
 sudo mount /dev/ubuntu-vg/log /mnt/var/log
-sudo mount /dev/ubuntu-vg/audo /mnt/var/log/audit
+sudo mount /dev/ubuntu-vg/audit /mnt/var/log/audit
 
 sudo mount /dev/sda1 /mnt/boot
 sudo mount --bind /dev /mnt/dev # I'm not entirely sure this is necessary
@@ -17,12 +17,10 @@ echo 'mount -t proc proc /proc' >> /mnt/postinstall_chroot.sh
 echo 'mount -t sysfs sys /sys' >> /mnt/postinstall_chroot.sh
 echo 'mount -t devpts devpts /dev/pts' >> /mnt/postinstall_chroot.sh
 MYDISK=$(sudo blkid | grep LUKS | cut -d " " -f 2 | sed 's/\"//g')
-echo "CryptDisk $MYDISK none luks,discard" >> /mnt mydisk.txt
-chmod +x /mnt/postinstall_chroot.sh
-
-sudo chroot /mnt
-cat /mydisk.txt >> /etc/crypttab
-
-#Lastly, rebuild some boot files.
+echo "CryptDisk $MYDISK none luks,discard" >> /mnt/mydisk.txt
 echo 'update-initramfs -k all -c' >> /mnt/postinstall_chroot.sh
 echo 'update-grub' >> /mnt/postinstall_chroot.sh
+echo 'exit' >> /mnt/postinstall_chroot.sh
+chmod +x /mnt/postinstall_chroot.sh
+sudo chroot /mnt
+
