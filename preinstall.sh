@@ -13,6 +13,6 @@ sudo lvcreate -n swap -L 2G ubuntu-vg
 sudo lvcreate -n var -L 2G ubuntu-vg
 sudo lvcreate -n log -L 2G ubuntu-vg
 sudo lvcreate -n audit -L 2G ubuntu-vg
-sudo lvcreate -n tmp -L 10G ubuntu-vg
+sudo lvcreate -n tmp -L 2G ubuntu-vg
 sudo lvcreate -n root -L 10G ubuntu-vg
 sudo lvcreate -n home -l +100%FREE ubuntu-vg
