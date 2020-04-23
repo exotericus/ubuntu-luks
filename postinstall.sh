@@ -12,16 +12,17 @@ sudo mount --bind /run/lvm /mnt/run/lvm
 #(Only if you're using EFI): 
 sudo mount /dev/sda2 /mnt/boot/efi
 
-sudo chroot /mnt
-#From the chroot, mount a couple more things
-mount -t proc proc /proc
-mount -t sysfs sys /sys
-mount -t devpts devpts /dev/pts
-
+echo '#!/bin/bash' >> /mnt/postinstall_chroot.sh
+echo 'mount -t proc proc /proc' >> /mnt/postinstall_chroot.sh
+echo 'mount -t sysfs sys /sys' >> /mnt/postinstall_chroot.sh
+echo 'mount -t devpts devpts /dev/pts' >> /mnt/postinstall_chroot.sh
 MYDISK=$(sudo blkid | grep LUKS | cut -d " " -f 2 | sed 's/\"//g')
-echo CryptDisk $MYDISK none,luks,discard >> /etc/crypttab
-#CryptDisk UUID=bd3b598d-88fc-476e-92bb-e4363c98f81d none luks,discard
-#Lastly, rebuild some boot files.
+echo "CryptDisk $MYDISK none luks,discard" >> /mnt mydisk.txt
+chmod +x /mnt/postinstall_chroot.sh
 
-update-initramfs -k all -c
-update-grub
+sudo chroot /mnt
+cat /mydisk.txt >> /etc/crypttab
+
+#Lastly, rebuild some boot files.
+echo 'update-initramfs -k all -c' >> /mnt/postinstall_chroot.sh
+echo 'update-grub' >> /mnt/postinstall_chroot.sh
